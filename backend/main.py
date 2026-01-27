@@ -1,0 +1,72 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import psycopg2
+import psycopg2.extras
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --- DB Connection Function ---
+def get_db_connection():
+    try:
+        conn = psycopg2.connect(
+            host="127.0.0.1",
+            database="portfolio",
+            user="portfolio_user",
+            password="password123"
+        )
+        return conn
+    except Exception as e:
+        print("DB Connection Failed:", e)
+        return None
+
+# --- Models ---
+class ContactMessage(BaseModel):
+    name: str
+    email: str
+    phone_number: str = None
+    message: str
+
+# --- Endpoints ---
+
+@app.get("/api/experience")
+def get_experience():
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(status_code=500, detail="DB connection failed")
+    
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("SELECT * FROM portfolio_schema.experience ORDER BY end_date IS NULL DESC,start_date DESC;")
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return rows
+
+@app.post("/api/contact")
+def post_contact(msg: ContactMessage):
+    conn = get_db_connection()
+    if not conn:
+        raise HTTPException(status_code=500, detail="DB connection failed")
+    
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO portfolio_schema.contact_messages (name, email, phone_number, message)
+        VALUES (%s, %s, %s, %s)
+        RETURNING id;
+        """,
+        (msg.name, msg.email, msg.phone_number, msg.message)
+    )
+    inserted_id = cur.fetchone()[0]
+    conn.commit()
+    cur.close()
+    conn.close()
+    return {"id": inserted_id, "status": "success"}
+

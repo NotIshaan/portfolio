@@ -1,2 +1,52 @@
 @import "tailwindcss";
 
+@theme {
+  /* Colors - Modern DevOps Console Palette */
+  --color-background: #0f172a;
+  /* slate-950 */
+  --color-foreground: #e2e8f0;
+  /* slate-200 */
+
+  --color-muted: #1e293b;
+  /* slate-800 */
+  --color-muted-foreground: #94a3b8;
+  /* slate-400 */
+
+  --color-primary: #06b6d4;
+  /* cyan-500 (Terminal Cyan) */
+  --color-primary-foreground: #000000;
+
+  --color-secondary: #0f172a;
+  /* slate-950 */
+  --color-secondary-foreground: #cbd5e1;
+  /* slate-300 */
+
+  --color-accent: #334155;
+  /* slate-700 */
+  --color-accent-foreground: #f1f5f9;
+  /* slate-100 */
+
+  --color-success: #10b981;
+  /* emerald-500 */
+  --color-warning: #f59e0b;
+  /* amber-500 */
+  --color-danger: #ef4444;
+  /* red-500 */
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+@layer base {
+  /* Load Fonts (ensure internet access or local files) */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

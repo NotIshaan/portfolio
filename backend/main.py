@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import time
 
 app = FastAPI()
 
@@ -20,24 +21,30 @@ app.add_middleware(
 
 # --- DB Connection Function ---
 def get_db_connection():
-    try:
-        conn = psycopg2.connect(
-            host=os.getenv("DB_HOST", "127.0.0.1"),
-            database=os.getenv("DB_NAME", "portfolio"),
-            user=os.getenv("DB_USER", "portfolio_user"),
-            password=os.getenv("DB_PASSWORD", "password123")
-        )
-        return conn
-    except Exception as e:
-        print("DB Connection Failed:", e)
-        return None
+    retries = 5
+    while retries:
+        try:
+            conn = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=int(os.getenv("DB_PORT", 5432)),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+            )
+            return conn
+        except Exception as e:
+            print("DB connection failed, retrying...", e)
+            retries -= 1
+            time.sleep(2)
+
+    return None
 
 
 # --- Models ---
 class ContactMessage(BaseModel):
     name: str
     email: str
-    phone_number: str = None
+    phone_number: str | None = None
     message: str
 
 
@@ -47,10 +54,10 @@ def get_experience():
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection failed")
-    
+
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute("""
-        SELECT * FROM portfolio_schema.experience 
+        SELECT * FROM portfolio_schema.experience
         ORDER BY end_date IS NULL DESC, start_date DESC;
     """)
     rows = cur.fetchall()
@@ -64,11 +71,11 @@ def post_contact(msg: ContactMessage):
     conn = get_db_connection()
     if not conn:
         raise HTTPException(status_code=500, detail="DB connection failed")
-    
+
     cur = conn.cursor()
     cur.execute(
         """
-        INSERT INTO portfolio_schema.contact_messages 
+        INSERT INTO portfolio_schema.contact_messages
         (name, email, phone_number, message)
         VALUES (%s, %s, %s, %s)
         RETURNING id;

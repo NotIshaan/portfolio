@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Database data (VERY IMPORTANT)
+pgdata/
+db-data/
+postgres-data/
+
+# Node (you accidentally have this here)
+node_modules/
+

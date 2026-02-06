@@ -1,36 +1,41 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
-import Navbar from "./components/Navbar";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import Projects from "./pages/Projects";
+import Experience from "./pages/Experience";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
 
-import HomePage from "./pages/HomePage";
-import ExperienceSelectPage from "./pages/ExperienceSelectPage";
-import ExperienceListPage from "./pages/ExperienceListPage";
-import SkillsPage from "./pages/SkillsPage";
-import ContactPage from "./pages/ContactPage";
+// Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function App() {
   return (
-    <BrowserRouter>
-      {/* Global layout */}
-      <div className="min-h-screen bg-zinc-950 text-white">
-        {/* Persistent navbar */}
-        <Navbar />
-
-        {/* Page content */}
+    <Router>
+      <ScrollToTop />
+      <Layout>
+        {/* AnimatePresence for page transitions can go here if we wrap Routes in a location-aware component */}
         <Routes>
-          <Route path="/" element={<HomePage />} />
-
-          {/* Experience flow */}
-          <Route path="/experience" element={<ExperienceSelectPage />} />
-          <Route path="/experience/:type" element={<ExperienceListPage />} />
-
-          <Route path="/skills" element={<SkillsPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/experience" element={<Experience />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </Layout>
+    </Router>
   );
 }
 
 export default App;
-

@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: portfolio
+      POSTGRES_USER: portfolio_user
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5433:5432"   # host access only
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      DB_HOST: postgres       # service name, NOT localhost
+      DB_PORT: 5432
+      DB_NAME: portfolio
+      DB_USER: portfolio_user
+      DB_PASSWORD: password123
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
+

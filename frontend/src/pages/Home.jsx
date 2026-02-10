@@ -4,6 +4,7 @@ import Button from "../components/ui/Button";
 import TerminalWindow from "../components/ui/TerminalWindow";
 import Typewriter from "../components/ui/Typewriter";
 import { Link } from "react-router-dom";
+console.log("API URL:", import.meta.env.VITE_API_URL);
 
 const Home = () => {
   return (

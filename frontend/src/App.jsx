@@ -13,18 +13,37 @@ import Blog from "./pages/Blog";
 // Scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
   return null;
 };
 
 function App() {
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL;
+
+    if (!API_URL) {
+      console.warn("VITE_API_URL is not defined");
+      return;
+    }
+
+    // Wake up backend on first site visit (Render free tier)
+    fetch(`${API_URL}/health`)
+      .then(() => {
+        console.log("Backend wake-up ping sent");
+      })
+      .catch(() => {
+        console.warn("Backend wake-up ping failed (still sleeping)");
+      });
+  }, []);
+
   return (
     <Router>
       <ScrollToTop />
       <Layout>
-        {/* AnimatePresence for page transitions can go here if we wrap Routes in a location-aware component */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
@@ -39,3 +58,4 @@ function App() {
 }
 
 export default App;
+

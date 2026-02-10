@@ -11,7 +11,7 @@ const Projects = () => {
 
     useEffect(() => {
         // Fetch from same endpoint but filter for type='project'
-        fetch("http://127.0.0.1:8000/api/experience")
+        fetch(`${import.meta.env.VITE_API_URL}/api/experience`)
             .then(res => res.json())
             .then(data => {
                 const projs = data

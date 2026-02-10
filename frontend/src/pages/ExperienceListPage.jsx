@@ -18,7 +18,7 @@ export default function ExperienceListPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/experience");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/experience`);
         if (!response.ok) {
           throw new Error("Failed to fetch experiences");
         }

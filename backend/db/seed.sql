@@ -32,17 +32,17 @@ VALUES
   'work',
   'Web Development Intern',
   'Creative Sources General Trading LLC',
-  'Contributed to web development projects in a fast-paced environment, enhancing frontend responsiveness and user experience.',
-  'Web Development, Frontend',
+  'Worked on building and maintaining responsive web interfaces using modern frontend technologies. Collaborated closely with designers and backend developers to implement UI components, improve site performance, and fix cross-browser compatibility issues. Assisted in integrating REST APIs and enhancing overall user experience in a fast-paced production environment.',
+  'HTML, CSS, JavaScript, Responsive Design, REST APIs, Frontend Development',
   '2025-01-01',
   '2025-02-28'
 ),
 (
   'work',
-  'Video Editor',
-  'Spectrum.FIT',
-  'Produced high-quality video content for digital platforms.',
-  'Video Editing, Content Creation',
+  'Video Editor & Content Manager',
+  'Spectrum.FIT (London, UK)',
+  'Worked as the primary video editor and content manager for a London-based fitness influencer. Handled end-to-end video editing, graphic design, and content production for Instagram, TikTok, and YouTube. Managed both long-form and short-form content, ensuring consistent branding, high engagement, and platform-specific optimization.',
+  'Video Editing, Graphic Design, Content Strategy, Instagram, TikTok, YouTube',
   '2021-12-01',
   '2023-05-31'
 );
@@ -72,3 +72,4 @@ VALUES
   '2024-06-01',
   '2024-11-30'
 );
+

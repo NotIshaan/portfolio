@@ -49,6 +49,12 @@ class ContactMessage(BaseModel):
 
 
 # --- Endpoints ---
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.get("/api/experience")
 def get_experience():
     conn = get_db_connection()
